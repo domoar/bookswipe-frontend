@@ -114,15 +114,15 @@ export default function SwipeCard({ quote, onSwipe, isTop }: SwipeCardProps) {
   const zIndex = isTop ? 20 : 10;
 
   // Show like/nope overlay based on swipe direction
-  const showLike = position.x > 50;
-  const showNope = position.x < -50;
+  const likeOpacity = Math.max(0, Math.min(1, position.x / 100));
+  const nopeOpacity = Math.max(0, Math.min(1, -position.x / 100));
 
   return (
     <div
       ref={cardRef}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
-      className="absolute select-none"
+      className="absolute select-none w-full h-full"
       style={{
         transform: `translate(${position.x}px, ${position.y}px) rotate(${rotation}deg) scale(${scale})`,
         transition: isDragging ? 'none' : 'all 0.3s ease-out',
@@ -133,47 +133,67 @@ export default function SwipeCard({ quote, onSwipe, isTop }: SwipeCardProps) {
         userSelect: 'none',
       }}
     >
-      <div className="relative h-[500px] w-[340px] overflow-hidden rounded-3xl bg-white shadow-2xl">
-        {/* Like/Nope Overlay */}
-        {showLike && (
-          <div className="pointer-events-none absolute left-8 top-8 z-10 rotate-12 rounded-xl border-4 border-green-500 bg-green-500/20 px-6 py-3 backdrop-blur-sm">
-            <span className="text-3xl font-bold text-green-500">LIKE</span>
-          </div>
-        )}
-        {showNope && (
-          <div className="pointer-events-none absolute right-8 top-8 z-10 -rotate-12 rounded-xl border-4 border-red-500 bg-red-500/20 px-6 py-3 backdrop-blur-sm">
-            <span className="text-3xl font-bold text-red-500">NOPE</span>
-          </div>
-        )}
+      <div className="relative h-full w-full overflow-hidden rounded-[32px] bg-gradient-to-br from-gray-600 to-gray-800 shadow-2xl">
+        
+        {/* Quote Section - Top */}
+        <div className="absolute top-0 left-0 right-0 h-[65%] flex items-center justify-center p-8 bg-gradient-to-b from-gray-500/40 to-transparent">
+          <p className="text-white text-2xl font-serif leading-relaxed text-center pointer-events-none">
+            &ldquo;{quote.text}&rdquo;
+          </p>
+        </div>
 
-        {/* Card Content */}
-        <div className="pointer-events-none flex h-full flex-col justify-between p-8">
-          {/* Quote Text */}
-          <div className="flex flex-1 items-center justify-center">
-            <p className="text-center font-serif text-2xl leading-relaxed text-gray-800">
-              "{quote.text}"
-            </p>
-          </div>
-
-          {/* Author & Mood Tags */}
-          <div className="space-y-4">
-            <p className="text-center text-lg font-semibold text-gray-700">
-              — {quote.author}
-            </p>
-
-            {/* Mood Tags */}
-            <div className="flex flex-wrap justify-center gap-2">
-              {quote.mood.map((mood, index) => (
-                <span
-                  key={index}
-                  className="rounded-full bg-gradient-to-r from-[#0F0E5F] to-[#155099] px-4 py-1.5 text-sm text-white"
-                >
-                  {mood}
-                </span>
-              ))}
+        {/* Book Info Section - Bottom */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-6 pb-8 pointer-events-none">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <h3 className="text-white text-2xl font-serif font-bold mb-1">
+                Lorem Ipsum Book
+              </h3>
+              <p className="text-white/80 text-sm mb-1">
+                {quote.author}, 2020
+              </p>
+              <p className="text-white/60 text-sm uppercase tracking-wide">
+                {quote.mood.join(' • ')}
+              </p>
             </div>
+            
+            {/* Info Button */}
+            <button 
+              className="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors pointer-events-auto"
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('Show book info');
+              }}
+            >
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
           </div>
         </div>
+
+        {/* Bottom Accent Bar */}
+        <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#D69A2C] to-[#C8922A]" />
+
+        {/* LIKE Overlay */}
+        {isTop && (
+          <div
+            className="absolute top-12 left-12 px-6 py-3 rounded-2xl bg-green-500 rotate-[-20deg] pointer-events-none"
+            style={{ opacity: likeOpacity }}
+          >
+            <span className="text-white text-4xl font-black">LIKE</span>
+          </div>
+        )}
+
+        {/* NOPE Overlay */}
+        {isTop && (
+          <div
+            className="absolute top-12 right-12 px-6 py-3 rounded-2xl bg-red-500 rotate-[20deg] pointer-events-none"
+            style={{ opacity: nopeOpacity }}
+          >
+            <span className="text-white text-4xl font-black">NOPE</span>
+          </div>
+        )}
       </div>
     </div>
   );

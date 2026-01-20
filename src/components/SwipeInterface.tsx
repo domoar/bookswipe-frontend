@@ -38,35 +38,39 @@ export default function SwipeInterface({ quotes, onComplete }: SwipeInterfacePro
     handleSwipe(direction);
   };
 
-  const progress = ((currentIndex + 1) / quotes.length) * 100;
-  const remainingCards = quotes.length - currentIndex;
-
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#0F0E5FDE] to-[#155099EB] px-6 py-12">
+    <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-[#0F0E5FDE] to-[#155099EB] overflow-hidden">
       <StarsBackground />
 
-      <div className="relative z-10 flex flex-col items-center">
-        {/* Header */}
-        <div className="mb-8 w-full max-w-md">
-          <div className="mb-2 flex items-center justify-between text-white">
-            <span className="text-sm font-medium">
-              {currentIndex + 1} von {quotes.length}
-            </span>
-            <span className="text-sm font-medium">
-              {remainingCards} übrig
-            </span>
-          </div>
-          {/* Progress Bar */}
-          <div className="h-2 w-full overflow-hidden rounded-full bg-white/20">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-[#D69A2C] to-[#C8922A] transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+      {/* Top Bar with time and icons */}
+      <div className="relative z-30 flex items-center justify-between px-6 pt-4 pb-2">
+        <span className="text-white text-sm font-medium">9:41</span>
+        <div className="flex items-center gap-2">
+          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
         </div>
+        <div className="flex items-center gap-1">
+          <div className="flex flex-col gap-0.5">
+            <div className="w-0.5 h-1 bg-white rounded"></div>
+            <div className="w-0.5 h-2 bg-white rounded"></div>
+            <div className="w-0.5 h-2.5 bg-white rounded"></div>
+            <div className="w-0.5 h-3 bg-white rounded"></div>
+          </div>
+          <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+          </svg>
+          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+            <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z" />
+          </svg>
+        </div>
+      </div>
 
+      {/* Main Content Area */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 pb-24">
         {/* Cards Stack */}
-        <div className="relative mb-12 h-[500px] w-[340px]">
+        <div className="relative w-full max-w-[420px] h-[580px]">
           {quotes.map((quote, index) => {
             // Only render current and next card
             if (index < currentIndex || index > currentIndex + 1) return null;
@@ -83,78 +87,41 @@ export default function SwipeInterface({ quotes, onComplete }: SwipeInterfacePro
 
           {/* Empty state when all swiped */}
           {currentIndex >= quotes.length && (
-            <div className="flex h-[500px] w-[340px] items-center justify-center rounded-3xl bg-white/10 backdrop-blur-sm">
+            <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-white/10 backdrop-blur-sm">
               <p className="text-xl text-white">Analysiere deine Vorlieben...</p>
             </div>
           )}
         </div>
+      </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-center gap-6">
-          <button
-            onClick={() => handleButtonSwipe('left')}
-            disabled={currentIndex >= quotes.length}
-            className="group flex h-16 w-16 items-center justify-center rounded-full border-4 border-red-500 bg-white shadow-xl transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:hover:scale-100"
-            aria-label="Nicht interessiert"
-          >
-            <svg
-              className="h-8 w-8 text-red-500 transition-transform group-hover:scale-110"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={3}
-                d="M6 18L18 6M6 6l12 12"
-              />
+      {/* Bottom Navigation Bar */}
+      <div className="relative z-30 bg-[#0F0E5F]/50 backdrop-blur-xl border-t border-white/10">
+        <div className="flex items-center justify-around px-8 py-4">
+          <button className="flex flex-col items-center gap-1 transition-all hover:scale-110">
+            <svg className="w-7 h-7 text-[#D69A2C]" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
             </svg>
           </button>
 
-          <button
-            onClick={() => handleButtonSwipe('right')}
-            disabled={currentIndex >= quotes.length}
-            className="group flex h-20 w-20 items-center justify-center rounded-full border-4 border-green-500 bg-white shadow-xl transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:hover:scale-100"
-            aria-label="Gefällt mir"
-          >
-            <svg
-              className="h-10 w-10 text-green-500 transition-transform group-hover:scale-110"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                clipRule="evenodd"
-              />
+          <button className="flex flex-col items-center gap-1 transition-all hover:scale-110">
+            <svg className="w-7 h-7 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
           </button>
 
-          <button
-            className="group flex h-14 w-14 items-center justify-center rounded-full border-4 border-yellow-500 bg-white shadow-xl transition-all duration-200 hover:scale-110"
-            aria-label="Info"
-          >
-            <svg
-              className="h-6 w-6 text-yellow-500 transition-transform group-hover:scale-110"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
+          <button className="flex flex-col items-center gap-1 transition-all hover:scale-110">
+            <svg className="w-7 h-7 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </button>
+
+          <button className="flex flex-col items-center gap-1 transition-all hover:scale-110">
+            <svg className="w-7 h-7 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </button>
         </div>
-
-        {/* Instructions */}
-        <p className="mt-8 text-center text-sm text-white/70">
-          Swipe nach rechts für "Gefällt mir" • Nach links für "Nicht interessiert"
-        </p>
       </div>
     </div>
   );
