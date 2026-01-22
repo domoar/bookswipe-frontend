@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SwipeCard from './SwipeCard';
 import StarsBackground from './StarsBackground';
-import { Book } from '@/data/books';
+import { Book } from '@/services/api';
+import { postSwipe } from '@/services/api';
 
 interface SwipeInterfaceProps {
   books: Book[];
@@ -16,8 +17,18 @@ export default function SwipeInterface({ books, onComplete }: SwipeInterfaceProp
   const [currentIndex, setCurrentIndex] = useState(0);
   const [likedBooks, setLikedBooks] = useState<Book[]>([]);
 
-  const handleSwipe = (direction: 'left' | 'right') => {
+  const handleSwipe = async (direction: 'left' | 'right') => {
     const currentBook = books[currentIndex];
+
+    // POST Request ans Backend senden
+    try {
+      await postSwipe({
+        bookId: currentBook.id,
+        direction: direction,
+      });
+    } catch (error) {
+      console.error('Failed to post swipe:', error);
+    }
 
     if (direction === 'right') {
       setLikedBooks([...likedBooks, currentBook]);

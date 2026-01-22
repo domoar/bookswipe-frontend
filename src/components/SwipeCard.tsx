@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Book } from '@/data/books';
+import { Book } from '@/services/api';
 
 interface SwipeCardProps {
   book: Book;
