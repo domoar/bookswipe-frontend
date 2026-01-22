@@ -114,13 +114,22 @@ export default function UserSurveyPage() {
                 <button
                   key={genre}
                   onClick={() => toggleGenre(genre)}
-                  className={`p-4 rounded-2xl border-2 transition-all ${
+                  className={`p-4 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden ${
                     selectedGenres.includes(genre)
-                      ? 'bg-[#D69A2C] border-[#D69A2C] text-white'
-                      : 'bg-white/10 border-white/20 text-white hover:bg-white/20'
+                      ? 'bg-[#D69A2C] border-[#D69A2C] text-white shadow-lg shadow-[#D69A2C]/50 scale-105'
+                      : 'bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/40 hover:scale-102'
                   }`}
                 >
-                  <span className="font-medium">{genre}</span>
+                  {selectedGenres.includes(genre) && (
+                    <div className="absolute top-2 right-2">
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
+                  <span className={`font-medium ${selectedGenres.includes(genre) ? 'font-bold' : ''}`}>
+                    {genre}
+                  </span>
                 </button>
               ))}
             </div>
@@ -140,13 +149,20 @@ export default function UserSurveyPage() {
                 <button
                   key={habit}
                   onClick={() => setReadingHabit(habit)}
-                  className={`w-full p-5 rounded-2xl border-2 transition-all text-left ${
+                  className={`w-full p-5 rounded-2xl border-2 transition-all duration-300 text-left flex items-center justify-between ${
                     readingHabit === habit
-                      ? 'bg-[#D69A2C] border-[#D69A2C] text-white'
-                      : 'bg-white/10 border-white/20 text-white hover:bg-white/20'
+                      ? 'bg-[#D69A2C] border-[#D69A2C] text-white shadow-lg shadow-[#D69A2C]/50 scale-105'
+                      : 'bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/40 hover:scale-102'
                   }`}
                 >
-                  <span className="font-medium text-lg">{habit}</span>
+                  <span className={`text-lg ${readingHabit === habit ? 'font-bold' : 'font-medium'}`}>
+                    {habit}
+                  </span>
+                  {readingHabit === habit && (
+                    <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                  )}
                 </button>
               ))}
             </div>
@@ -166,13 +182,22 @@ export default function UserSurveyPage() {
                 <button
                   key={mood}
                   onClick={() => toggleMood(mood)}
-                  className={`p-4 rounded-2xl border-2 transition-all ${
+                  className={`p-4 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden ${
                     selectedMoods.includes(mood)
-                      ? 'bg-[#D69A2C] border-[#D69A2C] text-white'
-                      : 'bg-white/10 border-white/20 text-white hover:bg-white/20'
+                      ? 'bg-[#D69A2C] border-[#D69A2C] text-white shadow-lg shadow-[#D69A2C]/50 scale-105'
+                      : 'bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/40 hover:scale-102'
                   }`}
                 >
-                  <span className="font-medium">{mood}</span>
+                  {selectedMoods.includes(mood) && (
+                    <div className="absolute top-2 right-2">
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
+                  <span className={`font-medium ${selectedMoods.includes(mood) ? 'font-bold' : ''}`}>
+                    {mood}
+                  </span>
                 </button>
               ))}
             </div>
@@ -192,13 +217,20 @@ export default function UserSurveyPage() {
                 <button
                   key={ageRange}
                   onClick={() => setAge(ageRange)}
-                  className={`w-full p-5 rounded-2xl border-2 transition-all text-left ${
+                  className={`w-full p-5 rounded-2xl border-2 transition-all duration-300 text-left flex items-center justify-between ${
                     age === ageRange
-                      ? 'bg-[#D69A2C] border-[#D69A2C] text-white'
-                      : 'bg-white/10 border-white/20 text-white hover:bg-white/20'
+                      ? 'bg-[#D69A2C] border-[#D69A2C] text-white shadow-lg shadow-[#D69A2C]/50 scale-105'
+                      : 'bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/40 hover:scale-102'
                   }`}
                 >
-                  <span className="font-medium text-lg">{ageRange}</span>
+                  <span className={`text-lg ${age === ageRange ? 'font-bold' : 'font-medium'}`}>
+                    {ageRange}
+                  </span>
+                  {age === ageRange && (
+                    <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                  )}
                 </button>
               ))}
             </div>
@@ -211,9 +243,9 @@ export default function UserSurveyPage() {
         <button
           onClick={handleNext}
           disabled={!canProceed()}
-          className={`w-full py-4 rounded-full font-bold text-lg transition-all ${
+          className={`w-full py-4 rounded-full font-bold text-lg transition-all duration-300 ${
             canProceed()
-              ? 'bg-[#D69A2C] text-white hover:bg-[#C8922A]'
+              ? 'bg-[#D69A2C] text-white hover:bg-[#C8922A] hover:scale-105 shadow-lg shadow-[#D69A2C]/50'
               : 'bg-white/10 text-white/30 cursor-not-allowed'
           }`}
         >
