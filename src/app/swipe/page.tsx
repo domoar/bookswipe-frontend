@@ -25,8 +25,8 @@ export default function SwipePage() {
     allHistory.push(swipeHistory);
     localStorage.setItem('swipeHistory', JSON.stringify(allHistory));
     
-    // Navigate to results
-    router.push('/results');
+    // Navigate to post-swipe page first
+    router.push('/post-swipe');
   };
 
   return <SwipeInterface books={booksData} onComplete={handleComplete} />;
