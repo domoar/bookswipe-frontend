@@ -1,18 +1,19 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Quote } from '@/types';
+import { Book } from '@/data/books';
 
 interface SwipeCardProps {
-  quote: Quote;
+  book: Book;
   onSwipe: (direction: 'left' | 'right') => void;
   isTop: boolean;
 }
 
-export default function SwipeCard({ quote, onSwipe, isTop }: SwipeCardProps) {
+export default function SwipeCard({ book, onSwipe, isTop }: SwipeCardProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState(0);
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
   const startPos = useRef({ x: 0, y: 0 });
 
@@ -117,6 +118,18 @@ export default function SwipeCard({ quote, onSwipe, isTop }: SwipeCardProps) {
   const likeOpacity = Math.max(0, Math.min(1, position.x / 100));
   const nopeOpacity = Math.max(0, Math.min(1, -position.x / 100));
 
+  const nextQuote = () => {
+    if (currentQuoteIndex < book.quotes.length - 1) {
+      setCurrentQuoteIndex(currentQuoteIndex + 1);
+    }
+  };
+
+  const prevQuote = () => {
+    if (currentQuoteIndex > 0) {
+      setCurrentQuoteIndex(currentQuoteIndex - 1);
+    }
+  };
+
   return (
     <div
       ref={cardRef}
@@ -138,8 +151,46 @@ export default function SwipeCard({ quote, onSwipe, isTop }: SwipeCardProps) {
         {/* Quote Section - Top */}
         <div className="absolute top-0 left-0 right-0 h-[65%] flex items-center justify-center p-8 bg-gradient-to-b from-gray-500/40 to-transparent">
           <p className="text-white text-2xl font-serif leading-relaxed text-center pointer-events-none">
-            &ldquo;{quote.text}&rdquo;
+            &ldquo;{book.quotes[currentQuoteIndex].text}&rdquo;
           </p>
+          
+          {/* Quote Navigation Dots */}
+          {book.quotes.length > 1 && (
+            <div className="absolute top-4 left-0 right-0 flex justify-center gap-2">
+              {book.quotes.map((_, index) => (
+                <div
+                  key={index}
+                  className={`h-1 rounded-full transition-all ${
+                    index === currentQuoteIndex
+                      ? 'w-8 bg-white'
+                      : 'w-1 bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+          
+          {/* Left/Right tap areas for navigation */}
+          {book.quotes.length > 1 && isTop && (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevQuote();
+                }}
+                className="absolute left-0 top-0 bottom-[35%] w-1/3 pointer-events-auto"
+                style={{ background: 'transparent' }}
+              />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextQuote();
+                }}
+                className="absolute right-0 top-0 bottom-[35%] w-1/3 pointer-events-auto"
+                style={{ background: 'transparent' }}
+              />
+            </>
+          )}
         </div>
 
         {/* Book Info Section - Bottom */}
@@ -147,13 +198,13 @@ export default function SwipeCard({ quote, onSwipe, isTop }: SwipeCardProps) {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h3 className="text-white text-2xl font-serif font-bold mb-1">
-                Lorem Ipsum Book
+                {book.title}
               </h3>
               <p className="text-white/80 text-sm mb-1">
-                {quote.author}, 2020
+                {book.author}, {book.year}
               </p>
               <p className="text-white/60 text-sm uppercase tracking-wide">
-                {quote.mood.join(' • ')}
+                {book.genre} • {book.subGenres.slice(0, 2).join(' • ')}
               </p>
             </div>
             
@@ -162,7 +213,7 @@ export default function SwipeCard({ quote, onSwipe, isTop }: SwipeCardProps) {
               className="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors pointer-events-auto"
               onClick={(e) => {
                 e.stopPropagation();
-                console.log('Show book info');
+                console.log('Show book info:', book);
               }}
             >
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

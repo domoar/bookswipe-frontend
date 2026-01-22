@@ -4,32 +4,32 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SwipeCard from './SwipeCard';
 import StarsBackground from './StarsBackground';
-import { Quote } from '@/types';
+import { Book } from '@/data/books';
 
 interface SwipeInterfaceProps {
-  quotes: Quote[];
-  onComplete: (likedQuotes: Quote[]) => void;
+  books: Book[];
+  onComplete: (likedBooks: Book[]) => void;
 }
 
-export default function SwipeInterface({ quotes, onComplete }: SwipeInterfaceProps) {
+export default function SwipeInterface({ books, onComplete }: SwipeInterfaceProps) {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [likedQuotes, setLikedQuotes] = useState<Quote[]>([]);
+  const [likedBooks, setLikedBooks] = useState<Book[]>([]);
 
   const handleSwipe = (direction: 'left' | 'right') => {
-    const currentQuote = quotes[currentIndex];
+    const currentBook = books[currentIndex];
 
     if (direction === 'right') {
-      setLikedQuotes([...likedQuotes, currentQuote]);
+      setLikedBooks([...likedBooks, currentBook]);
     }
 
     // Move to next card
     const nextIndex = currentIndex + 1;
     
-    if (nextIndex >= quotes.length) {
-      // All quotes swiped, show results
+    if (nextIndex >= books.length) {
+      // All books swiped, show results
       setTimeout(() => {
-        onComplete(direction === 'right' ? [...likedQuotes, currentQuote] : likedQuotes);
+        onComplete(direction === 'right' ? [...likedBooks, currentBook] : likedBooks);
       }, 400);
     } else {
       setCurrentIndex(nextIndex);
@@ -83,14 +83,14 @@ export default function SwipeInterface({ quotes, onComplete }: SwipeInterfacePro
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 pb-32">
         {/* Cards Stack */}
         <div className="relative w-full max-w-[420px] h-[580px]">
-          {quotes.map((quote, index) => {
+          {books.map((book, index) => {
             // Only render current and next card
             if (index < currentIndex || index > currentIndex + 1) return null;
 
             return (
               <SwipeCard
-                key={quote.id}
-                quote={quote}
+                key={book.id}
+                book={book}
                 onSwipe={handleSwipe}
                 isTop={index === currentIndex}
               />
@@ -98,7 +98,7 @@ export default function SwipeInterface({ quotes, onComplete }: SwipeInterfacePro
           })}
 
           {/* Empty state when all swiped */}
-          {currentIndex >= quotes.length && (
+          {currentIndex >= books.length && (
             <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-white/10 backdrop-blur-sm">
               <p className="text-xl text-white">Analysiere deine Vorlieben...</p>
             </div>
@@ -110,7 +110,7 @@ export default function SwipeInterface({ quotes, onComplete }: SwipeInterfacePro
           {/* Dislike Button */}
           <button
             onClick={() => handleButtonSwipe('left')}
-            disabled={currentIndex >= quotes.length}
+            disabled={currentIndex >= books.length}
             className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border-2 border-red-500 flex items-center justify-center hover:scale-110 hover:bg-red-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -123,8 +123,8 @@ export default function SwipeInterface({ quotes, onComplete }: SwipeInterfacePro
             onClick={() => {
               if (currentIndex > 0) {
                 setCurrentIndex(currentIndex - 1);
-                if (likedQuotes.length > 0) {
-                  setLikedQuotes(likedQuotes.slice(0, -1));
+                if (likedBooks.length > 0) {
+                  setLikedBooks(likedBooks.slice(0, -1));
                 }
               }
             }}
@@ -139,7 +139,7 @@ export default function SwipeInterface({ quotes, onComplete }: SwipeInterfacePro
           {/* Like Button */}
           <button
             onClick={() => handleButtonSwipe('right')}
-            disabled={currentIndex >= quotes.length}
+            disabled={currentIndex >= books.length}
             className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border-2 border-green-500 flex items-center justify-center hover:scale-110 hover:bg-green-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 20 20">

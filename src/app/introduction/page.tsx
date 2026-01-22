@@ -7,7 +7,7 @@ export default function IntroductionPage() {
   const router = useRouter();
 
   const handleContinue = () => {
-    router.push('/swipe');
+    router.push('/survey');
   };
 
   return <IntroductionScreen onContinue={handleContinue} />;
